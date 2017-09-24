@@ -1,0 +1,131 @@
+<html>
+<head>
+<title>eShop</title>
+
+<style type="text/css">
+body {
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+h1 {
+	color: fuchsia;
+	text-align: center;
+	font-weight: bolder;
+	font-size: 72px;
+	font-family: cursive;
+	margin: 0;
+	margin-left: 5px;
+	font-weight: bolder;
+	font-size: 48px;
+	margin: 0
+}
+
+tr {
+	border-bottom: 1px solid #CCC;
+	padding: 15px 0;
+	display: block;
+}
+
+.image-container {
+	text-align: center;
+	border: 1px solid #CCC;
+	width: 150px;
+}
+
+.data-container {
+	vertical-align: top;
+	padding-left: 15px;
+}
+
+p {
+	margin: 0 0 5px;
+}
+
+.item-link, .item-link:hover, .item-link:visited, .item-link:active {
+	text-decoration: none;
+	color: #333;
+}
+
+.title {
+	color: #5786bd;
+	font-weight: bold;
+	margin-bottom: 10px;
+}
+
+.subtitle {
+	color: #777;
+	font-size: 12px;
+}
+
+.price {
+	color: #333;
+	font-weight: bold;
+}
+
+.bin {
+	color: #777;
+	font-size: 12px;
+}
+
+.fs {
+	font-size: 12px;
+	font-weight: bold;
+}
+
+.findStr {
+	width: 80%;
+	height: 10%;
+	margin-left: 10%;
+	font-size: 24px;
+}
+</style>
+<script type="text/javascript" src="Scripts/jquery-1.11.0.js"></script>
+</head>
+<body>
+	<h1>eShop</h1>
+	<div id="results"></div>
+	<script type="text/javascript">
+		function startSearch() {
+			alert("hi");
+			searchString = searchText.value;
+			var url = "http://svcs.ebay.com/services/search/FindingService/v1";
+			url += "?OPERATION-NAME=findItemsByKeywords";
+			url += "&SERVICE-VERSION=1.0.0";
+			url += "&SECURITY-APPNAME=TamarAvi-eshop-PRD-38dfd86bc-c21a0007";
+			url += "&GLOBAL-ID=EBAY-US";
+			url += "&RESPONSE-DATA-FORMAT=JSON";
+			url += "&callback=_cb_findItemsByKeywords";
+			url += "&REST-PAYLOAD";
+			url += "&keywords=" + searchString;
+			url += "&paginationInput.entriesPerPage=12";
+			s=document.createElement('script'); // create script element
+			s.src= url;
+			document.body.appendChild(s);
+			alert("hi1");
+		}
+		function _cb_findItemsByKeywords(root) {
+			var items = root.findItemsByKeywordsResponse[0].searchResult[0].item
+					|| [];
+			var html = [];
+			html
+					.push('<table width="100%" border="0" cellspacing="0" cellpadding="3"><tbody>');
+			for (var i = 0; i < items.length; ++i) {
+				var item = items[i];
+				var title = item.title;
+				var pic = item.galleryURL;
+				var viewitem = item.viewItemURL;
+				if (null != title && null != viewitem) {
+					html.push('<tr><td>' + '<img src="' + pic + '" border="0">'
+							+ '</td>'
+							+ '<td><a href="' + viewitem + '" target="_blank">'
+							+ title + '</a></td></tr>');
+				}
+			}
+			html.push('</tbody></table>');
+			document.getElementById("results").innerHTML = html.join("");
+		}
+	</script>
+	<input class=findStr type="text" name="searchText"></input>
+	<input type="button" value="Go" onclick="startSearch()"></input>
+</body>
+</html>
